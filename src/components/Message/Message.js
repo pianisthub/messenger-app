@@ -5,7 +5,7 @@ import './Message.css';
 const Message = forwardRef(({ message, username }, ref) => {
 
     const isUser = username === message.username;
-
+    console.log('in app.js', message)
     return (
         <div ref={ref} className={`message ${isUser && 'message__user'}`}>
             <Typography className="alignLeft" variant="body2" display="block" gutterBottom>
@@ -15,7 +15,7 @@ const Message = forwardRef(({ message, username }, ref) => {
                 <CardContent>
                     <Typography color="initial" variant="subtitle1" component="h5"
                     >
-                        {message.message}
+                        {message}
                     </Typography>
                 </CardContent>
             </Card >

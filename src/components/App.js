@@ -1,66 +1,84 @@
-import React, { useEffect, useState } from 'react';
-import { FormControl, IconButton, Input, InputLabel } from '@material-ui/core';
+import React, { useEffect, useState, useRef } from 'react';
+import { FormControl, IconButton, Input, InputLabel, Button } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
-import firebase from 'firebase';
+import axios from 'axios';
 import FlipMove from 'react-flip-move';
-import db from './Firebase/Firebase';
 import Message from './Message/Message';
 import Logo from '../assets/images/logo.png';
 import './App.css';
-
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 function App() {
-
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
+    const [user, setUser] = useState(null);
+    const messagesEndRef = useRef(null);
 
-    const name = () => {
-        let enterName = '';
-        while (!enterName || enterName.length > 16) {
-            enterName = prompt('Please enter your name');
+    const scrollToBottom = () => {
+       
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+       
+    };
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/messages');
+                setMessages(response.data);
+                scrollToBottom(); // Scroll to bottom after fetching messages
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+            }
+        };
+
+        fetchMessages();
+    }, []);
+
+    const signIn = () => {
+        const usernamePrompt = prompt('Please enter your username:');
+        if (usernamePrompt) {
+            setUser({ displayName: usernamePrompt });
+            setUsername(usernamePrompt);
         }
-        return enterName;
-    }
+    };
 
-    useEffect(() => {
-        setUsername(name)
-    }, [])
-
-    useEffect(() => {
-        db.collection('messages')
-            .orderBy('timestamp', 'desc')
-            .onSnapshot(snapshot => {
-                setMessages(snapshot.docs.map(doc => ({ id: doc.id, message: doc.data() })))
-            })
-    }, [])
+    const signOut = () => {
+        setUser(null);
+        setUsername('');
+    };
 
     const updateInput = (e) => {
-        setInput(e.target.value)
-    }
+        setInput(e.target.value);
+    };
 
-    const sendMessage = (e) => {
+    const sendMessage = async (e) => {
         e.preventDefault();
 
-        db.collection('messages').add({
-            message: input,
-            username: username,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        setInput('');
-    }
+        if (user) {
+            try {
+                const response = await axios.post('http://localhost:5000/messages', {
+                    username: username,
+                    message: input
+                });
+                setMessages((prevMessages) => [...prevMessages, response.data]);  
+                setInput('');
+                scrollToBottom();  
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        } else {
+            alert('Please sign in to send messages.');
+        }
+    };
+
+  
 
     const theme = createMuiTheme({
         palette: {
-            primary: {
-                main: '#0b81ff',
-            },
-            secondary: {
-                // This is green.A700 as hex.
-                main: '#0b81ff',
-            },
+            primary: { main: '#0b81ff' },
+            secondary: { main: '#0b81ff' },
         },
     });
 
@@ -68,29 +86,36 @@ function App() {
         <div className="app">
             <header className="app__header">
                 <h1><img src={Logo} className="logo" alt="React Messenger" /> React Messenger</h1>
-
-                <h3>Welcome <span className="bold">{username}</span> !</h3>
+                {user ? (
+                    <>
+                        <Button onClick={signOut} style={{ color: 'white', backgroundColor: 'black' }}>Sign Out</Button>
+                        <h3>Welcome <span className="bold">{username}</span>!</h3>
+                    </>
+                ) : (
+                    <Button onClick={signIn} style={{ color: 'white', backgroundColor: 'black' }}>Sign In</Button>
+                )}
             </header>
+
+            <div className="app__messageContainer">
+                <FlipMove>
+                    {messages.map(({ id, username, message }) => (
+                        <Message key={id} username={username} message={message} />
+                    ))}
+                </FlipMove>
+                <div ref={messagesEndRef} />
+            </div>
 
             <form className="app__form" onSubmit={sendMessage}>
                 <ThemeProvider theme={theme}>
                     <FormControl className="app__formControl">
-                        <InputLabel value={input} onChange={updateInput}>Type a message...</InputLabel>
-                        <Input className="app__input" color="primary" value={input} onChange={(e) => setInput(e.target.value)} />
-                        <IconButton className="app__button" disabled={!input} color="primary" variant="contained" type="submit" onClick={sendMessage}><SendIcon /></IconButton>
+                        <InputLabel>Type a message...</InputLabel>
+                        <Input className="app__input" value={input} onChange={updateInput} />
+                        <IconButton className="app__button" disabled={!input} color="primary" variant="contained" type="submit">
+                            <SendIcon />
+                        </IconButton>
                     </FormControl>
                 </ThemeProvider>
             </form>
-
-            <div className="app__messageContainer">
-                <FlipMove>
-                    {
-                        messages.map(({ id, message }) => (
-                            <Message key={id} username={username} message={message} />
-                        ))
-                    }
-                </FlipMove>
-            </div>
         </div>
     );
 }

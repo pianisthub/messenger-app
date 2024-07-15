@@ -1,5 +1,9 @@
+/* Existing styles */
 .app {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .app__header {
@@ -15,8 +19,11 @@
 }
 
 .app__messageContainer {
-    margin-bottom: 100px !important;
-    margin-top: 140px !important;
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 120px ;
+    margin-bottom: 100px ;
+    padding: 20px;
 }
 
 .app__form {
@@ -60,4 +67,18 @@ h3 {
 .logo {
     height: 46px;
     margin-right: 10px;
+}
+
+/* New styles for sign-in and sign-out buttons */
+.sign-in-button, .sign-out-button {
+    color: white;
+    background-color: black;
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.sign-in-button:hover, .sign-out-button:hover {
+    background-color: darkgray;
 }
