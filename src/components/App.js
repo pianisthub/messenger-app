@@ -8,6 +8,7 @@ import Logo from '../assets/images/logo.png';
 import './App.css';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import Call from './Call';
 
 function App() {
     const [input, setInput] = useState('');
@@ -17,15 +18,13 @@ function App() {
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
-       
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-       
+        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     };
 
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/messages');
+                const response = await axios.get('https://messenger-app-rvsu.onrender.com/messages');
                 setMessages(response.data);
                 scrollToBottom(); // Scroll to bottom after fetching messages
             } catch (error) {
@@ -58,7 +57,7 @@ function App() {
 
         if (user) {
             try {
-                const response = await axios.post('http://localhost:5000/messages', {
+                const response = await axios.post('https://messenger-app-rvsu.onrender.com/messages', {
                     username: username,
                     message: input
                 });
@@ -73,8 +72,6 @@ function App() {
         }
     };
 
-  
-
     const theme = createMuiTheme({
         palette: {
             primary: { main: '#0b81ff' },
@@ -83,41 +80,45 @@ function App() {
     });
 
     return (
-        <div className="app">
-            <header className="app__header">
-                <h1><img src={Logo} className="logo" alt="React Messenger" /> React Messenger</h1>
-                {user ? (
-                    <>
-                        <Button onClick={signOut} style={{ color: 'white', backgroundColor: 'black' }}>Sign Out</Button>
-                        <h3>Welcome <span className="bold">{username}</span>!</h3>
-                    </>
-                ) : (
-                    <Button onClick={signIn} style={{ color: 'white', backgroundColor: 'black' }}>Sign In</Button>
-                )}
-            </header>
+    <div className="app">
+      <header className="app__header">
+        <h1>React Messenger</h1>
+        {user ? (
+          <>
+            <Button onClick={signOut} style={{ color: 'white', backgroundColor: 'black' }}>Sign Out</Button>
+            <h3>Welcome <span className="bold">{username}</span>!</h3>
+          </>
+        ) : (
+          <Button onClick={signIn} style={{ color: 'white', backgroundColor: 'black' }}>Sign In</Button>
+        )}
+      </header>
 
-            <div className="app__messageContainer">
-                <FlipMove>
-                    {messages.map(({ id, username, message }) => (
-                        <Message key={id} username={username} message={message} />
-                    ))}
-                </FlipMove>
-                <div ref={messagesEndRef} />
-            </div>
+      <div className="app__messageContainer">
+        <FlipMove>
+          {messages.map(({ id, username, message }) => (
+            <Message key={id} username={username} message={message} />
+          ))}
+        </FlipMove>
+        <div ref={messagesEndRef} />
+      </div>
 
-            <form className="app__form" onSubmit={sendMessage}>
-                <ThemeProvider theme={theme}>
-                    <FormControl className="app__formControl">
-                        <InputLabel>Type a message...</InputLabel>
-                        <Input className="app__input" value={input} onChange={updateInput} />
-                        <IconButton className="app__button" disabled={!input} color="primary" variant="contained" type="submit">
-                            <SendIcon />
-                        </IconButton>
-                    </FormControl>
-                </ThemeProvider>
-            </form>
+      <div className="app__content">
+        <div className="call-container">
+          <Call username={username} />
         </div>
-    );
+        <form className="app__form" onSubmit={sendMessage}>
+          <ThemeProvider theme={theme}>
+            <FormControl className="app__formControl">
+              <InputLabel>Type a message...</InputLabel>
+              <Input className="app__input" value={input} onChange={updateInput} />
+              <IconButton className="app__button" disabled={!input} color="primary" variant="contained" type="submit">
+                <SendIcon />
+              </IconButton>
+            </FormControl>
+          </ThemeProvider>
+        </form>
+      </div>
+    </div>
+  );
 }
-
 export default App;

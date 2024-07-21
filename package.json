@@ -9,17 +9,23 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^1.7.2",
+    "concurrently": "^8.2.2",
     "firebase": "^7.24.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-flip-move": "^3.0.4",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "simple-peer": "^9.11.1",
+    "socket.io-client": "^4.7.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
+    "start-frontend": "react-scripts start",
+    "start-backend": "cd backend && node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "teststart": "react-scripts start"
   },
   "eslintConfig": {
     "extends": "react-app"

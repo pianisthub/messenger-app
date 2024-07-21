@@ -1,84 +1,129 @@
-/* Existing styles */
+/* App.css */
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .app {
-    text-align: center;
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
 .app__header {
-    position: fixed;
-    top: 0;
-    background-color: #000;
-    color: #fff;
-    width: 100%;
-    z-index: 999;
-    -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.2);
-    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.2);
+    background-color: #0b81ff;
+    color: white;
+    padding: 10px;
+    text-align: center;
 }
 
 .app__messageContainer {
     flex: 1;
     overflow-y: auto;
-    margin-top: 120px ;
-    margin-bottom: 100px ;
-    padding: 20px;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
-.app__form {
-    position: fixed;
-    bottom: 0;
-    z-index: 999;
-    background-color: #e9e9eb;
-    padding: 20px;
-    width: 100%;
-    -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.2);
-    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.2);
+.message {
+    margin-bottom: 10px;
 }
 
-.app__formControl {
-    display: flex !important;
+.message__user {
+    text-align: right;
+}
+
+.message__userCard {
+    background-color: #dcf8c6;
+    display: inline-block;
+}
+
+.message__guestCard {
+    background-color: #ffffff;
+    display: inline-block;
+}
+
+/* Updated .app__content */
+.app__content {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    flex-direction: row !important;
-    justify-content: space-between;
-    padding-right: 20px !important;
+    padding: 10px;
+    background-color: #f1f1f1;
+}
+
+/* Updated .app__form */
+.app__form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background-color: #f1f1f1;
+    width: 300px;
+    max-width: 300px;
+    height: 100px;
+    max-height: 100px;
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+/* Updated .call-container */
+.call-container {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    max-width: 300px;
+    height: 200px;
+    max-height: 200px;
+    margin: 10px;
+    background-color: #f1f1f1;
+    padding: 8px;
+    box-sizing: border-box;
 }
 
 .app__input {
     flex: 1;
+    margin-right: 5px;
 }
 
 .app__button {
-    flex: 0;
-}
-
-h1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-h3 {
-    font-weight: normal;
-}
-
-.logo {
-    height: 46px;
-    margin-right: 10px;
-}
-
-/* New styles for sign-in and sign-out buttons */
-.sign-in-button, .sign-out-button {
+    background-color: #0b81ff;
     color: white;
-    background-color: black;
-    margin: 10px;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
+    height: 100%;
 }
 
-.sign-in-button:hover, .sign-out-button:hover {
-    background-color: darkgray;
+/* Responsive Design */
+@media (max-width: 600px) {
+    .app__content {
+        flex-direction: column;
+    }
+
+    .app__form, .call-container {
+        max-width: 100%;
+        padding: 8px;
+        margin: 5px auto;
+    }
+
+    .app__messageContainer {
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+}
+
+@media (min-width: 601px) {
+    .app__content {
+        flex-direction: row;
+    }
+
+    .app__form, .call-container {
+        max-width: 300px;
+        max-height: 100px;
+    }
+
+    .app__messageContainer {
+        padding: 10px;
+    }
 }

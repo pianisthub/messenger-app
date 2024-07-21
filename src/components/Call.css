@@ -1,0 +1,23 @@
+
+
+.call-container input {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.call-container button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #0b81ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.call-container button:hover {
+    background-color: #005bb5;
+}

@@ -7,6 +7,9 @@
 .pnp.js
 src/components/apps-postfix.js
 src/components/App - Copy firbase.js  
+src/components/call-postfix.js 
+
+
 # testing
 /coverage
 
