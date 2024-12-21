@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react'; //dec21
 import io from 'socket.io-client';
 import SimplePeer from 'simple-peer';
 import './Call.css';
@@ -22,7 +22,7 @@ const Call = ({ username }) => {
         socketRef.current = io.connect('https://messenger-app-rvsu.onrender.com'); // Change to  backend URL
         console.log('Connecting to signaling server...');
 
-        navigator.mediaDevices.getUserMedia({ audio: true })
+        navigator.mediaDevices.getUserMedia({ audio: true, video: true })
             .then(stream => {
                 setStream(stream);
                 socketRef.current.emit('join-room', username);
@@ -145,6 +145,8 @@ const Call = ({ username }) => {
         <div className="call-container">
             {callAccepted && <audio ref={userAudio} autoPlay />}
             {callAccepted && <audio ref={partnerAudio} autoPlay />}
+            {callAccepted && <video ref={userVideo} autoPlay />}
+{callAccepted && <video ref={partnerVideo} autoPlay />}
             <div>
                 <input
                     type="text"
